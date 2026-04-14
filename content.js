@@ -70,6 +70,7 @@
   highlightButton.type = "button";
   highlightButton.className = "cn-btn cn-tool-btn";
   highlightButton.setAttribute("aria-label", "Highlight selected text");
+  highlightButton.title = "Highlight selected text (Ctrl+Shift+H)";
   highlightButton.textContent = "Highlight";
 
   const fontSelect = document.createElement("select");
@@ -274,8 +275,8 @@
       return;
     }
     document.execCommand("hiliteColor", false, "#fff59d");
+    captureSelection();
     storeEditorContent();
-    editor.innerHTML = state.contentHtml;
     renderPreview();
     persistStateDebounced();
   }
@@ -285,8 +286,8 @@
       return;
     }
     document.execCommand("fontName", false, fontFamily);
+    captureSelection();
     storeEditorContent();
-    editor.innerHTML = state.contentHtml;
     renderPreview();
     persistStateDebounced();
   }
@@ -359,6 +360,21 @@
 
   fontSelect.addEventListener("change", () => {
     applyFont(fontSelect.value);
+  });
+
+  editor.addEventListener("keydown", (event) => {
+    const isHighlightShortcut =
+      (event.ctrlKey || event.metaKey) &&
+      event.shiftKey &&
+      event.key.toLowerCase() === "h";
+
+    if (!isHighlightShortcut) {
+      return;
+    }
+
+    event.preventDefault();
+    captureSelection();
+    applyHighlight();
   });
 
   editor.addEventListener("keyup", captureSelection);
