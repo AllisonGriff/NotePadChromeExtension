@@ -1,16 +1,18 @@
 {
   "manifest_version": 3,
   "name": "Collapsible Browser Notepad",
-  "description": "A floating collapsible notepad that saves notes with chrome.storage.",
+  "description": "A draggable floating notepad with markdown preview that can be toggled from the toolbar.",
   "version": "1.0.0",
   "permissions": [
-    "storage"
+    "storage",
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
-  },
-  "action": {
-    "default_title": "Toggle Notepad"
   },
   "content_scripts": [
     {
@@ -25,5 +27,8 @@
       ],
       "run_at": "document_idle"
     }
-  ]
+  ],
+  "action": {
+    "default_title": "Toggle Browser Notepad"
+  }
 }
