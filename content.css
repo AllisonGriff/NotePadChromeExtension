@@ -91,6 +91,12 @@
   height: 30px;
 }
 
+.cn-tool-btn.is-active {
+  background: #2f6df6;
+  border-color: #2f6df6;
+  color: #ffffff;
+}
+
 .cn-font-select {
   flex: 1;
   min-width: 120px;

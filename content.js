@@ -113,6 +113,7 @@
   let startTop = 0;
   let startRight = 0;
   let lastRange = null;
+  let highlightModeEnabled = false;
 
   const allowedTags = new Set(["DIV", "BR", "SPAN", "FONT", "B", "STRONG", "I", "EM", "U", "MARK"]);
 
@@ -256,6 +257,21 @@
     lastRange = range.cloneRange();
   }
 
+  function hasEditorSelection() {
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+      return false;
+    }
+    const range = selection.getRangeAt(0);
+    return editor.contains(range.commonAncestorContainer);
+  }
+
+  function setHighlightMode(enabled) {
+    highlightModeEnabled = Boolean(enabled);
+    highlightButton.classList.toggle("is-active", highlightModeEnabled);
+    highlightButton.setAttribute("aria-pressed", String(highlightModeEnabled));
+  }
+
   function restoreSelection() {
     editor.focus();
     const selection = window.getSelection();
@@ -290,6 +306,14 @@
     storeEditorContent();
     renderPreview();
     persistStateDebounced();
+  }
+
+  function handleEditorSelectionChange() {
+    captureSelection();
+    if (!highlightModeEnabled || !hasEditorSelection()) {
+      return;
+    }
+    applyHighlight();
   }
 
   function applyState() {
@@ -355,7 +379,11 @@
   });
 
   highlightButton.addEventListener("click", () => {
-    applyHighlight();
+    setHighlightMode(!highlightModeEnabled);
+    if (highlightModeEnabled && hasEditorSelection()) {
+      captureSelection();
+      applyHighlight();
+    }
   });
 
   fontSelect.addEventListener("change", () => {
@@ -373,12 +401,15 @@
     }
 
     event.preventDefault();
-    captureSelection();
-    applyHighlight();
+    setHighlightMode(!highlightModeEnabled);
+    if (highlightModeEnabled && hasEditorSelection()) {
+      captureSelection();
+      applyHighlight();
+    }
   });
 
-  editor.addEventListener("keyup", captureSelection);
-  editor.addEventListener("mouseup", captureSelection);
+  editor.addEventListener("keyup", handleEditorSelectionChange);
+  editor.addEventListener("mouseup", handleEditorSelectionChange);
 
   editor.addEventListener("input", () => {
     storeEditorContent();
