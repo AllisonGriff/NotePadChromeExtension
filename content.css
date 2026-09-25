@@ -26,23 +26,6 @@
   box-sizing: border-box;
 }
 
-#cbn-root[data-theme="light"] {
-  --cbn-app-bg: #f8fafc;
-  --cbn-app-bg-2: #f1f5f9;
-  --cbn-header-bg: rgba(226, 232, 240, 0.95);
-  --cbn-body-bg: #f8fafc;
-  --cbn-border: #cbd5e1;
-  --cbn-soft-border: #94a3b8;
-  --cbn-text: #0f172a;
-  --cbn-text-muted: #475569;
-  --cbn-text-soft: #334155;
-  --cbn-accent: #2563eb;
-  --cbn-accent-strong: #1d4ed8;
-  --cbn-input-bg: #ffffff;
-  --cbn-preview-code-bg: #e2e8f0;
-  --cbn-shadow: 0 16px 35px rgba(15, 23, 42, 0.18);
-}
-
 .cbn-panel,
 .cbn-body,
 .cbn-editor,
